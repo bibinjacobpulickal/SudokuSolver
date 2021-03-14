@@ -33,7 +33,7 @@ struct ContentView: View {
                 Section(header: Text("Choose size")) {
                     ForEach(Size.allCases) {
                         NavigationLink($0.text,
-                                       destination: Text($0.text))
+                                       destination: SudokuView(size: $0))
                     }
                 }
             }
