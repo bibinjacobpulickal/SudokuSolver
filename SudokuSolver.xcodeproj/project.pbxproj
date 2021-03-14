@@ -12,6 +12,7 @@
 		EF33DF1225FD6116005E92CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF33DF1125FD6116005E92CB /* Assets.xcassets */; };
 		EF33DF1525FD6116005E92CB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF33DF1425FD6116005E92CB /* Preview Assets.xcassets */; };
 		EF33DF1E25FD653B005E92CB /* SudokuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF33DF1D25FD653B005E92CB /* SudokuView.swift */; };
+		EF7D5B4025FE8F53001D1089 /* Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7D5B3F25FE8F53001D1089 /* Size.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		EF33DF1425FD6116005E92CB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		EF33DF1625FD6116005E92CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EF33DF1D25FD653B005E92CB /* SudokuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SudokuView.swift; sourceTree = "<group>"; };
+		EF7D5B3F25FE8F53001D1089 /* Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Size.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				EF33DF0D25FD6112005E92CB /* SudokuSolverApp.swift */,
 				EF33DF0F25FD6112005E92CB /* ContentView.swift */,
+				EF7D5B3F25FE8F53001D1089 /* Size.swift */,
 				EF33DF1D25FD653B005E92CB /* SudokuView.swift */,
 				EF33DF1125FD6116005E92CB /* Assets.xcassets */,
 				EF33DF1625FD6116005E92CB /* Info.plist */,
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF7D5B4025FE8F53001D1089 /* Size.swift in Sources */,
 				EF33DF1E25FD653B005E92CB /* SudokuView.swift in Sources */,
 				EF33DF1025FD6112005E92CB /* ContentView.swift in Sources */,
 				EF33DF0E25FD6112005E92CB /* SudokuSolverApp.swift in Sources */,
