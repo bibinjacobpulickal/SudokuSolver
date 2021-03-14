@@ -44,19 +44,20 @@ struct SudokuView: View {
                 ForEach(0..<size.rawValue, id: \.self) { row in
                     HStack {
                         ForEach(0..<size.rawValue, id: \.self) { column in
+                            let value = size.rawValue * row + column + 1
                             Button(action: {
-                                values[selectedCell.0][selectedCell.1] = size.rawValue * row + column + 1
+                                values[selectedCell.0][selectedCell.1] = value
                                 selectedCell = (-1, -1)
                             }) {
                                 Text("\(size.rawValue * row + column + 1)")
                                     .bold()
                                     .frame(width: 44, height: 44)
                                     .foregroundColor(.white)
-                                    .background(selectedCell == (-1, -1) ? Color.gray : .blue)
+                                    .background(selectedCell == (-1, -1) || values[selectedCell.0][selectedCell.1] == value ? Color.gray : .blue)
                                     .cornerRadius(8)
                                     .padding(2)
                             }
-                            .disabled(selectedCell == (-1, -1))
+                            .disabled(selectedCell == (-1, -1) || values[selectedCell.0][selectedCell.1] == value)
                         }
                     }
                 }
@@ -67,11 +68,11 @@ struct SudokuView: View {
                     Image(systemName: "delete.left")
                         .frame(width: 44, height: 44)
                         .foregroundColor(.black)
-                        .background(selectedCell == (-1, -1) ? Color.gray :
-                                        values[selectedCell.0][selectedCell.1] == -1 ? .gray : .red)
+                        .background(selectedCell == (-1, -1) || values[selectedCell.0][selectedCell.1] == -1 ? Color.gray : .red)
                         .cornerRadius(8)
                         .padding(2)
                 }
+                .disabled(selectedCell == (-1, -1) || values[selectedCell.0][selectedCell.1] == -1)
             }
             Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
                 Text("SOLVE")
