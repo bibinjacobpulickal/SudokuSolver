@@ -17,72 +17,84 @@ struct SudokuView: View {
 
     var body: some View {
         VStack {
-            GeometryReader { proxy in
-                VStack {
-                    ForEach(0..<viewModel.values.count, id: \.self) { row in
-                        HStack(spacing: 0) {
-                            ForEach(0..<viewModel.values[row].count, id: \.self) { column in
-                                Button(action: {
-                                    viewModel.selectCell((row, column))
-                                }) {
-                                    Text(viewModel.values[row][column] == -1 ? "" : "\(viewModel.values[row][column])")
-                                        .font(.largeTitle)
-                                        .fontWeight(viewModel.selectedCell == (row, column) ? .bold : .regular)
-                                        .foregroundColor(.primary)
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        .background(viewModel.selectedCell == (row, column) ? Color.gray.opacity(0.25) : .clear)
-                                }
-                                .border(size: viewModel.size, cell: (row, column))
-                            }
-                            .frame(width: min(proxy.size.width, proxy.size.height)/CGFloat(viewModel.size.size),
-                                   height: min(proxy.size.width, proxy.size.height)/CGFloat(viewModel.size.size))
-                        }
-                    }
-                }
-            }
-            VStack {
-                ForEach(0..<viewModel.size.rawValue, id: \.self) { row in
-                    HStack {
-                        ForEach(0..<viewModel.size.rawValue, id: \.self) { column in
-                            let value = viewModel.size.rawValue * row + column + 1
-                            Button(action: {
-                                viewModel.updateValue(value)
-                            }) {
-                                Text("\(value)")
-                                    .bold()
-                                    .frame(width: 44, height: 44)
-                                    .foregroundColor(.white)
-                                    .background(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == value ? Color.gray : .blue)
-                                    .cornerRadius(8)
-                                    .padding(2)
-                            }
-                            .disabled(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == value)
-                        }
-                    }
-                }
-                Button(action: viewModel.delete) {
-                    Image(systemName: "delete.left")
-                        .frame(width: 44, height: 44)
-                        .foregroundColor(.black)
-                        .background(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == -1 ? Color.gray : .red)
-                        .cornerRadius(8)
-                        .padding(2)
-                }
-                .disabled(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == -1)
-            }
-            Button(action: viewModel.solve) {
-                Text("SOLVE")
-                    .bold()
-                    .foregroundColor(.black)
-                    .frame(height: 50)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.yellow)
-                    .cornerRadius(8)
-            }
+            sudokuGrid
+            numberPad
+            solveButton
         }
         .padding()
         .onAppear {
             viewModel.values = Array(repeating: Array(repeating: -1, count: viewModel.size.size), count: viewModel.size.size)
+        }
+    }
+
+    var sudokuGrid: some View {
+        GeometryReader { proxy in
+            VStack {
+                ForEach(0..<viewModel.values.count, id: \.self) { row in
+                    HStack(spacing: 0) {
+                        ForEach(0..<viewModel.values[row].count, id: \.self) { column in
+                            Button(action: {
+                                viewModel.selectCell((row, column))
+                            }) {
+                                Text(viewModel.values[row][column] == -1 ? "" : "\(viewModel.values[row][column])")
+                                    .font(.largeTitle)
+                                    .fontWeight(viewModel.selectedCell == (row, column) ? .bold : .regular)
+                                    .foregroundColor(.primary)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .background(viewModel.selectedCell == (row, column) ? Color.gray.opacity(0.25) : .clear)
+                            }
+                            .border(size: viewModel.size, cell: (row, column))
+                        }
+                        .frame(width: min(proxy.size.width, proxy.size.height)/CGFloat(viewModel.size.size),
+                               height: min(proxy.size.width, proxy.size.height)/CGFloat(viewModel.size.size))
+                    }
+                }
+            }
+        }
+    }
+
+    var numberPad: some View {
+        VStack {
+            ForEach(0..<viewModel.size.rawValue, id: \.self) { row in
+                HStack {
+                    ForEach(0..<viewModel.size.rawValue, id: \.self) { column in
+                        let value = viewModel.size.rawValue * row + column + 1
+                        Button(action: {
+                            viewModel.updateValue(value)
+                        }) {
+                            Text("\(value)")
+                                .bold()
+                                .frame(width: 44, height: 44)
+                                .foregroundColor(.white)
+                                .background(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == value ? Color.gray : .blue)
+                                .cornerRadius(8)
+                                .padding(2)
+                        }
+                        .disabled(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == value)
+                    }
+                }
+            }
+            Button(action: viewModel.delete) {
+                Image(systemName: "delete.left")
+                    .frame(width: 44, height: 44)
+                    .foregroundColor(.black)
+                    .background(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == -1 ? Color.gray : .red)
+                    .cornerRadius(8)
+                    .padding(2)
+            }
+            .disabled(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == -1)
+        }
+    }
+
+    var solveButton: some View {
+        Button(action: viewModel.solve) {
+            Text("SOLVE")
+                .bold()
+                .foregroundColor(.black)
+                .frame(height: 50)
+                .frame(maxWidth: .infinity)
+                .background(Color.yellow)
+                .cornerRadius(8)
         }
     }
 }
