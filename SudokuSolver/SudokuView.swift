@@ -66,11 +66,11 @@ struct SudokuView: View {
                                 .bold()
                                 .frame(width: 44, height: 44)
                                 .foregroundColor(.white)
-                                .background(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == value ? Color.gray : .blue)
+                                .background(viewModel.buttonDisabled(value) ? Color.gray : .blue)
                                 .cornerRadius(8)
                                 .padding(2)
                         }
-                        .disabled(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == value)
+                        .disabled(viewModel.buttonDisabled(value))
                     }
                 }
             }
@@ -78,11 +78,11 @@ struct SudokuView: View {
                 Image(systemName: "delete.left")
                     .frame(width: 44, height: 44)
                     .foregroundColor(.black)
-                    .background(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == -1 ? Color.gray : .red)
+                    .background(viewModel.deleteButtonDisabled() ? Color.gray : .red)
                     .cornerRadius(8)
                     .padding(2)
             }
-            .disabled(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == -1)
+            .disabled(viewModel.deleteButtonDisabled())
         }
     }
 
