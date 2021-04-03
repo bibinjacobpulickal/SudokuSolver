@@ -22,9 +22,7 @@ struct SudokuView: View {
             solveButton
         }
         .padding()
-        .onAppear {
-            viewModel.values = Array(repeating: Array(repeating: -1, count: viewModel.size.size), count: viewModel.size.size)
-        }
+        .onAppear(perform: viewModel.reset)
     }
 
     var sudokuGrid: some View {
@@ -87,14 +85,25 @@ struct SudokuView: View {
     }
 
     var solveButton: some View {
-        Button(action: viewModel.solve) {
-            Text("SOLVE")
-                .bold()
-                .foregroundColor(.black)
-                .frame(height: 50)
-                .frame(maxWidth: .infinity)
-                .background(Color.yellow)
-                .cornerRadius(8)
+        HStack {
+            Button(action: viewModel.reset) {
+                Text("RESET")
+                    .bold()
+                    .foregroundColor(.black)
+                    .frame(height: 50)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.yellow)
+                    .cornerRadius(8)
+            }
+            Button(action: viewModel.solve) {
+                Text(viewModel.isSolved ? "SOLVED!" : "SOLVE")
+                    .bold()
+                    .foregroundColor(.black)
+                    .frame(height: 50)
+                    .frame(maxWidth: .infinity)
+                    .background(viewModel.isSolvable ? viewModel.isSolved ? Color.green : .blue : .red)
+                    .cornerRadius(8)
+            }
         }
     }
 }

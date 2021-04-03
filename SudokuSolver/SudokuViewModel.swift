@@ -12,19 +12,24 @@ class SudokuViewModel: ObservableObject {
     var size: Size
     @Published var values = [[Int]]()
     @Published var selectedCell = (-1, -1)
+    @Published var isSolved = false
+    @Published var isSolvable = true
 
     init(size: Size) {
         self.size = size
     }
 
+    func reset() {
+        values = Array(repeating: Array(repeating: -1, count: size.size), count: size.size)
+        selectedCell = (-1, -1)
+    }
+
     func updateValue(_ value: Int) {
         values[selectedCell.0][selectedCell.1] = value
-        selectedCell = (-1, -1)
     }
 
     func delete() {
         values[selectedCell.0][selectedCell.1] = -1
-        selectedCell = (-1, -1)
     }
 
     func selectCell(_ cell: (Int, Int)) {
