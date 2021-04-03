@@ -36,10 +36,7 @@ struct SudokuView: View {
                                         .foregroundColor(.primary)
                                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 }
-                                .border(Color.primary, edges: [.top], width: row.isMultiple(of: size.rawValue) ? 4 : 1)
-                                .border(Color.primary, edges: [.leading], width: column.isMultiple(of: size.rawValue) ? 4 : 1)
-                                .border(Color.primary, edges: [.bottom], width: row == size.size - 1 ? 4 : 1)
-                                .border(Color.primary, edges: [.trailing], width: column == size.size - 1 ? 4 : 1)
+                                .border(size: size, cell: (row, column))
                             }
                             .frame(width: min(proxy.size.width, proxy.size.height)/CGFloat(size.size),
                                    height: min(proxy.size.width, proxy.size.height)/CGFloat(size.size))
@@ -56,7 +53,7 @@ struct SudokuView: View {
                                 values[selectedCell.0][selectedCell.1] = value
                                 selectedCell = (-1, -1)
                             }) {
-                                Text("\(size.rawValue * row + column + 1)")
+                                Text("\(value)")
                                     .bold()
                                     .frame(width: 44, height: 44)
                                     .foregroundColor(.white)
@@ -105,6 +102,11 @@ struct SudokuView_Previews: PreviewProvider {
 }
 
 extension View {
+
+    func border(size: Size, cell: (Int, Int)) -> some View {
+        modifier(BorderModifier(size: size, cell: cell))
+    }
+
     func border(_ color: Color, edges: [Edge], width: CGFloat) -> some View {
         overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
     }
