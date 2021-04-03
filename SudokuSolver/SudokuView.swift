@@ -46,8 +46,7 @@ struct SudokuView: View {
                         ForEach(0..<viewModel.size.rawValue, id: \.self) { column in
                             let value = viewModel.size.rawValue * row + column + 1
                             Button(action: {
-                                viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] = value
-                                viewModel.selectedCell = (-1, -1)
+                                viewModel.updateValue(value)
                             }) {
                                 Text("\(value)")
                                     .bold()
@@ -61,10 +60,7 @@ struct SudokuView: View {
                         }
                     }
                 }
-                Button(action: {
-                    viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] = -1
-                    viewModel.selectedCell = (-1, -1)
-                }) {
+                Button(action: viewModel.delete) {
                     Image(systemName: "delete.left")
                         .frame(width: 44, height: 44)
                         .foregroundColor(.black)
