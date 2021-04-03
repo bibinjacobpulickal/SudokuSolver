@@ -9,14 +9,9 @@ import SwiftUI
 
 struct SudokuView: View {
 
-    var size: Size
-    @State private var values = [[Int]]()
-    @State private var selectedCell = (-1, -1)
-
     @StateObject var viewModel: SudokuViewModel
 
     init(size: Size) {
-        self.size = size
         _viewModel = StateObject(wrappedValue: .init(size: size))
     }
 
@@ -24,61 +19,62 @@ struct SudokuView: View {
         VStack {
             GeometryReader { proxy in
                 VStack {
-                    ForEach(0..<values.count, id: \.self) { row in
+                    ForEach(0..<viewModel.values.count, id: \.self) { row in
                         HStack(spacing: 0) {
-                            ForEach(0..<values[row].count, id: \.self) { column in
+                            ForEach(0..<viewModel.values[row].count, id: \.self) { column in
                                 Button(action: {
-                                        selectedCell = (row, column)
+                                    viewModel.selectCell((row, column))
                                 }) {
-                                    Text(values[row][column] == -1 ? "" : "\(values[row][column])")
+                                    Text(viewModel.values[row][column] == -1 ? "" : "\(viewModel.values[row][column])")
                                         .font(.largeTitle)
-                                        .fontWeight(Bool.random() ? .regular : .bold)
+                                        .fontWeight(viewModel.selectedCell == (row, column) ? .bold : .regular)
                                         .foregroundColor(.primary)
                                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .background(viewModel.selectedCell == (row, column) ? Color.gray.opacity(0.25) : .clear)
                                 }
-                                .border(size: size, cell: (row, column))
+                                .border(size: viewModel.size, cell: (row, column))
                             }
-                            .frame(width: min(proxy.size.width, proxy.size.height)/CGFloat(size.size),
-                                   height: min(proxy.size.width, proxy.size.height)/CGFloat(size.size))
+                            .frame(width: min(proxy.size.width, proxy.size.height)/CGFloat(viewModel.size.size),
+                                   height: min(proxy.size.width, proxy.size.height)/CGFloat(viewModel.size.size))
                         }
                     }
                 }
             }
             VStack {
-                ForEach(0..<size.rawValue, id: \.self) { row in
+                ForEach(0..<viewModel.size.rawValue, id: \.self) { row in
                     HStack {
-                        ForEach(0..<size.rawValue, id: \.self) { column in
-                            let value = size.rawValue * row + column + 1
+                        ForEach(0..<viewModel.size.rawValue, id: \.self) { column in
+                            let value = viewModel.size.rawValue * row + column + 1
                             Button(action: {
-                                values[selectedCell.0][selectedCell.1] = value
-                                selectedCell = (-1, -1)
+                                viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] = value
+                                viewModel.selectedCell = (-1, -1)
                             }) {
                                 Text("\(value)")
                                     .bold()
                                     .frame(width: 44, height: 44)
                                     .foregroundColor(.white)
-                                    .background(selectedCell == (-1, -1) || values[selectedCell.0][selectedCell.1] == value ? Color.gray : .blue)
+                                    .background(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == value ? Color.gray : .blue)
                                     .cornerRadius(8)
                                     .padding(2)
                             }
-                            .disabled(selectedCell == (-1, -1) || values[selectedCell.0][selectedCell.1] == value)
+                            .disabled(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == value)
                         }
                     }
                 }
                 Button(action: {
-                    values[selectedCell.0][selectedCell.1] = -1
-                    selectedCell = (-1, -1)
+                    viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] = -1
+                    viewModel.selectedCell = (-1, -1)
                 }) {
                     Image(systemName: "delete.left")
                         .frame(width: 44, height: 44)
                         .foregroundColor(.black)
-                        .background(selectedCell == (-1, -1) || values[selectedCell.0][selectedCell.1] == -1 ? Color.gray : .red)
+                        .background(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == -1 ? Color.gray : .red)
                         .cornerRadius(8)
                         .padding(2)
                 }
-                .disabled(selectedCell == (-1, -1) || values[selectedCell.0][selectedCell.1] == -1)
+                .disabled(viewModel.selectedCell == (-1, -1) || viewModel.values[viewModel.selectedCell.0][viewModel.selectedCell.1] == -1)
             }
-            Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
+            Button(action: viewModel.solve) {
                 Text("SOLVE")
                     .bold()
                     .foregroundColor(.black)
@@ -90,7 +86,7 @@ struct SudokuView: View {
         }
         .padding()
         .onAppear {
-            values = Array(repeating: Array(repeating: -1, count: size.size), count: size.size)
+            viewModel.values = Array(repeating: Array(repeating: -1, count: viewModel.size.size), count: viewModel.size.size)
         }
     }
 }
