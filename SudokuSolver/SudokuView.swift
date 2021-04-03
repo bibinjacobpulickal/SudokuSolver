@@ -13,6 +13,13 @@ struct SudokuView: View {
     @State private var values = [[Int]]()
     @State private var selectedCell = (-1, -1)
 
+    @StateObject var viewModel: SudokuViewModel
+
+    init(size: Size) {
+        self.size = size
+        _viewModel = StateObject(wrappedValue: .init(size: size))
+    }
+
     var body: some View {
         VStack {
             GeometryReader { proxy in
